@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import Services from '../Services.astro';
+import AiSection from '../AiSection.astro';
+import Compare from '../Compare.astro';
+import Process from '../Process.astro';
+import Principles from '../Principles.astro';
+import Faq from '../Faq.astro';
+import FinalCta from '../FinalCta.astro';
+import { getT, type Lang } from '../../i18n';
+import { faqLd, serviceLd, webPageLd } from '../../i18n/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const jsonLd = [
+  webPageLd(lang, 'home', t.meta.home.title, t.meta.home.description),
+  serviceLd(lang, 'gestion'),
+  serviceLd(lang, 'consultoria'),
+  faqLd(lang),
+];
+---
+
+<Base lang={lang} routeKey="home" title={t.meta.home.title} description={t.meta.home.description} jsonLd={jsonLd}>
+  <Hero lang={lang} />
+  <Services lang={lang} />
+  <AiSection lang={lang} />
+  <Compare lang={lang} />
+  <Process lang={lang} />
+  <Principles lang={lang} />
+  <Faq lang={lang} />
+  <FinalCta lang={lang} />
+</Base>

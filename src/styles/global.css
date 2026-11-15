@@ -1,0 +1,440 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/jetbrains-mono';
+
+@theme {
+  --color-paper: #f6f4ef;
+  --color-paper-2: #eeebe3;
+  --color-ink: #0b0b0c;
+  --color-lime: #d9f56e;
+  --color-muted: #5b5b57;
+  --font-display: 'Bricolage Grotesque Variable', 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  a,
+  button,
+  summary {
+    touch-action: manipulation;
+  }
+  .on-ink :focus-visible {
+    outline-color: var(--color-lime);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .wrap {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 88rem;
+    padding-inline: max(1.25rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+  @media (min-width: 640px) {
+    .wrap {
+      padding-inline: 2rem;
+    }
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.038em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+  /* Rotulador: la palabra clave de cada titular */
+  mark.hl {
+    background: linear-gradient(transparent 72%, var(--color-lime) 72%, var(--color-lime) 93%, transparent 93%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: inherit;
+    padding: 0 0.06em;
+    margin-inline: -0.02em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .display mark.hl {
+    font-weight: 650;
+  }
+  .on-ink mark.hl {
+    background: none;
+    color: var(--color-lime);
+  }
+
+  /* Etiqueta mono de sección: (01) Servicios */
+  .eyebrow,
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .eyebrow {
+    display: inline-block;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.95rem 1.6rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.25s,
+      color 0.25s,
+      border-color 0.25s,
+      transform 0.25s var(--ease-out-soft);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn .arrow {
+    transition: transform 0.3s var(--ease-out-soft);
+  }
+  .btn:hover .arrow {
+    transform: translateX(4px);
+  }
+  .btn-primary {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+  .btn-primary:hover {
+    background: var(--color-ink);
+    color: var(--color-lime);
+  }
+  .btn-ghost {
+    border-color: rgb(11 11 12 / 0.2);
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-ink);
+  }
+  .btn-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-ink:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .on-ink .btn-primary:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .on-ink .btn-primary {
+    box-shadow: 4px 4px 0 var(--color-paper);
+    border-color: var(--color-lime);
+  }
+  .on-ink .btn-primary:hover {
+    box-shadow: 6px 6px 0 var(--color-paper);
+  }
+
+  .chip {
+    display: inline-block;
+    border: 1px solid rgb(11 11 12 / 0.18);
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .prose-legal h2 {
+    margin-top: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .prose-legal p {
+    margin-top: 0.7rem;
+    color: var(--color-muted);
+    line-height: 1.75;
+  }
+  .prose-legal a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-lime);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+}
+
+@media (max-width: 639px) {
+  .fn-num {
+    font-size: 17px;
+  }
+}
+
+/* Embudo del hero: sin movimiento, se ve la versión estática */
+.funnel-static {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .funnel-dots {
+    display: none;
+  }
+  .funnel-static {
+    display: block;
+  }
+}
+
+/* Estados iniciales: GSAP los anima. Si el JS no llega (3,5 s), `.no-motion` lo muestra todo. */
+.js [data-hero],
+.js [data-reveal] {
+  opacity: 0;
+}
+.no-motion [data-hero],
+.no-motion [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-hero],
+  .js [data-reveal] {
+    opacity: 1;
+  }
+}
+
+/* Partes de un titular dividido por palabras (SplitText) */
+.sw {
+  will-change: transform;
+}
+
+/* Lenis (scroll suave) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Barra de progreso de lectura */
+#progress {
+  transform-origin: left;
+}
+
+/* Menú móvil */
+.burger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgb(11 11 12 / 0.2);
+  border-radius: 999px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.burger-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.05rem;
+  height: 2px;
+  margin-left: -0.525rem;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.45s var(--ease-out-soft);
+}
+.burger-line:nth-child(1) {
+  transform: translateY(-4px);
+}
+.burger-line:nth-child(2) {
+  transform: translateY(4px);
+}
+html[data-menu-open] .burger {
+  border-color: rgb(246 244 239 / 0.35);
+}
+html[data-menu-open] .burger-line:nth-child(1) {
+  transform: rotate(45deg);
+}
+html[data-menu-open] .burger-line:nth-child(2) {
+  transform: rotate(-45deg);
+}
+.site-header {
+  transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+}
+html[data-menu-open] .site-header {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-paper);
+}
+html[data-menu-open] {
+  overflow: hidden;
+}
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  visibility: hidden;
+  clip-path: circle(0px at calc(100% - 1.75rem) 2rem);
+  transition:
+    clip-path 0.75s var(--ease-out-soft),
+    visibility 0s 0.75s;
+}
+html[data-menu-open] .menu {
+  visibility: visible;
+  clip-path: circle(150% at calc(100% - 1.75rem) 2rem);
+  transition:
+    clip-path 0.85s var(--ease-out-soft),
+    visibility 0s;
+}
+.menu-item {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+html[data-menu-open] .menu-item {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s calc(0.2s + var(--i, 0) * 70ms),
+    transform 0.8s var(--ease-out-soft) calc(0.2s + var(--i, 0) * 70ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu,
+  html[data-menu-open] .menu,
+  .menu-item,
+  html[data-menu-open] .menu-item {
+    transition: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .burger,
+  .menu {
+    display: none;
+  }
+}
+
+/* Carruseles táctiles en móvil (Proceso, Principios); rejilla a partir de md */
+@layer components {
+  .snap-row {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    margin-inline: -1.25rem;
+    padding: 0 1.25rem 0.25rem;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .snap-row::-webkit-scrollbar {
+    display: none;
+  }
+  .snap-card {
+    flex: 0 0 84%;
+    scroll-snap-align: center;
+    border: 1px solid rgb(11 11 12 / 0.15);
+    border-radius: 1.75rem;
+  }
+  .snap-dots span {
+    height: 6px;
+    width: 6px;
+    border-radius: 999px;
+    background: rgb(11 11 12 / 0.2);
+    transition:
+      width 0.35s var(--ease-out-soft),
+      background-color 0.3s;
+  }
+  .snap-dots span[data-on='1'] {
+    width: 22px;
+    background: var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .snap-row {
+      margin-inline: -2rem;
+      padding-inline: 2rem;
+    }
+    .snap-card {
+      flex-basis: 56%;
+    }
+  }
+  @media (min-width: 768px) {
+    .snap-row {
+      display: grid;
+      margin-inline: 0;
+      padding: 0;
+      overflow: hidden;
+      scroll-snap-type: none;
+    }
+    .snap-card {
+      border: 0;
+      border-radius: 0;
+    }
+  }
+}
+
+/* FAQ */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .faq-icon {
+  transform: rotate(45deg);
+  background: var(--color-lime);
+  border-color: var(--color-lime);
+}
+.faq-icon {
+  transition:
+    transform 0.3s var(--ease-out-soft),
+    background-color 0.2s;
+}

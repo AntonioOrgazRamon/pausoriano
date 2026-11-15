@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import Process from '../Process.astro';
+import Faq from '../Faq.astro';
+import FinalCta from '../FinalCta.astro';
+import { fmt, getT, path, site, type Lang } from '../../i18n';
+import { breadcrumbLd, faqLd, serviceLd, webPageLd } from '../../i18n/schema';
+
+interface Props {
+  lang: Lang;
+  service: 'gestion' | 'consultoria';
+}
+const { lang, service } = Astro.props;
+const t = getT(lang);
+const s = t.servicePages[service];
+const other = service === 'gestion' ? 'consultoria' : 'gestion';
+const o = t.servicePages[other];
+const meta = t.meta[service];
+const jsonLd = [
+  webPageLd(lang, service, meta.title, meta.description),
+  serviceLd(lang, service),
+  breadcrumbLd(lang, service, s.name),
+  faqLd(lang),
+];
+---
+
+<Base lang={lang} routeKey={service} title={meta.title} description={meta.description} jsonLd={jsonLd}>
+  <section class="border-b border-ink/15 pt-28 sm:pt-36">
+    <div class="wrap pb-16">
+      <nav aria-label="Breadcrumb" class="label text-muted">
+        <ol class="flex items-center gap-2">
+          <li><a class="underline-offset-4 hover:underline" href={path('home', lang)}>{t.ui.breadcrumbHome}</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-ink">{s.name}</li>
+        </ol>
+      </nav>
+
+      <p data-hero="0" class="label mt-10 text-muted">({s.kicker})</p>
+      <h1 data-hero="1" class="display mt-5 text-[clamp(2.6rem,7vw,6.2rem)]" set:html={fmt(s.title)} />
+
+      <div class="mt-12 grid gap-10 border-t border-ink/15 pt-8 lg:grid-cols-12 lg:gap-8">
+        <div data-hero="2" class="lg:col-span-6">
+          <p class="max-w-xl text-lg leading-relaxed">{s.intro}</p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href={site.calendly} target="_blank" rel="noopener" class="btn btn-primary">
+              {t.ui.ctaLong} <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <div data-hero="3" class="border border-ink/15 p-6 lg:col-span-5 lg:col-start-8">
+          <p class="label text-muted">{t.ui.forWho}</p>
+          <p class="mt-3 font-display text-2xl leading-snug font-semibold tracking-tight">{s.forWho}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-ink/15 py-20 sm:py-28">
+    <div class="wrap grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <p data-reveal class="label text-muted">(01)</p>
+        <h2 class="display mt-6 text-[clamp(2rem,3.6vw,3.2rem)]">{t.ui.included}</h2>
+      </div>
+      <ul class="border-t border-ink/15 lg:col-span-8">
+        {
+          s.bullets.map((b, i) => (
+            <li data-reveal style={`--d:${i * 50}ms`} class="flex gap-6 border-b border-ink/15 py-6">
+              <span class="label pt-1.5 text-muted">0{i + 1}</span>
+              <span class="font-display text-xl leading-snug font-semibold tracking-tight sm:text-2xl">{b}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Process lang={lang} />
+  <Faq lang={lang} />
+
+  <section class="border-b border-ink/15">
+    <a
+      href={path(other, lang)}
+      class="wrap group flex items-center justify-between gap-6 py-10 transition-colors hover:bg-lime sm:py-14"
+    >
+      <span>
+        <span class="label text-muted group-hover:text-ink">{o.kicker}</span>
+        <span class="display mt-2 block text-[clamp(1.8rem,4vw,3.4rem)]">{o.name}</span>
+      </span>
+      <span class="font-display text-5xl transition-transform duration-300 group-hover:translate-x-2" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <FinalCta lang={lang} />
+</Base>

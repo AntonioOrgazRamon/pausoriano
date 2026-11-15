@@ -1,0 +1,105 @@
+---
+import { getT, path, routes, site, type Lang, type RouteKey } from '../i18n';
+interface Props {
+  lang: Lang;
+  routeKey: RouteKey;
+}
+const { lang, routeKey } = Astro.props;
+const t = getT(lang);
+const home = path('home', lang);
+const links = [
+  { href: `${home}#servicios`, label: t.ui.nav.services },
+  { href: `${home}#proceso`, label: t.ui.nav.process },
+  { href: `${home}#faq`, label: t.ui.nav.faq },
+];
+const services = [
+  { href: path('gestion', lang), label: t.servicePages.gestion.name },
+  { href: path('consultoria', lang), label: t.servicePages.consultoria.name },
+];
+const langs = ['es', 'en'] as const;
+---
+
+<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper">
+  <div class="wrap relative z-[2] flex h-16 items-center justify-between gap-3">
+    <a href={home} class="flex items-center gap-2.5 py-2.5 font-display text-xl font-semibold tracking-tight" aria-label={`${site.name} — ${t.ui.breadcrumbHome}`}>
+      <span class="size-3.5 rounded-full bg-lime ring-1 ring-ink/25" aria-hidden="true"></span>pausoriano
+    </a>
+
+    <nav aria-label="Principal" class="label hidden items-center gap-9 md:flex">
+      {links.map((l) => <a href={l.href} class="underline-offset-8 decoration-2 decoration-lime hover:underline">{l.label}</a>)}
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div role="group" aria-label={t.ui.langSwitch} class="label hidden overflow-hidden rounded-full border border-ink/20 md:flex">
+        {
+          langs.map((l) =>
+            l === lang ? (
+              <span aria-current="true" class="bg-ink px-2.5 py-2 text-paper">{l}</span>
+            ) : (
+              <a href={routes[routeKey][l]} hreflang={l} lang={l} class="px-2.5 py-2 transition-colors hover:bg-lime">{l}</a>
+            ),
+          )
+        }
+      </div>
+      <a href={site.calendly} target="_blank" rel="noopener" class="btn btn-primary !px-4 !py-2.5 !text-sm !shadow-none"><span class="sm:hidden">{t.ui.ctaShort}</span><span class="hidden sm:inline">{t.ui.cta}</span></a>
+      <button
+        id="menu-btn"
+        type="button"
+        class="burger md:hidden"
+        aria-expanded="false"
+        aria-controls="menu"
+        aria-label={t.ui.openMenu}
+        data-label-open={t.ui.openMenu}
+        data-label-close={t.ui.closeMenu}
+      >
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil a pantalla completa -->
+  <div id="menu" class="menu md:hidden" inert>
+    <nav aria-label={t.ui.menu} class="wrap flex min-h-full flex-col justify-between gap-10 pt-24 pb-[max(2rem,env(safe-area-inset-bottom))]">
+      <ul class="border-t border-paper/15">
+        {
+          links.map((l, i) => (
+            <li class="menu-item border-b border-paper/15" style={`--i:${i}`}>
+              <a href={l.href} class="flex items-baseline justify-between py-5 font-display text-[2.6rem] leading-none font-medium tracking-tighter">
+                {l.label}<span class="font-mono text-xs tracking-normal text-paper/40">0{i + 1}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="space-y-8">
+        <ul class="menu-item space-y-3" style="--i:3">
+          {services.map((s) => <li><a href={s.href} class="flex items-center justify-between text-lg text-paper/80">{s.label}<span aria-hidden="true">→</span></a></li>)}
+        </ul>
+        <div class="menu-item flex flex-col gap-4" style="--i:4">
+          <a href={site.calendly} target="_blank" rel="noopener" class="btn btn-primary w-full justify-between">
+            {t.ui.ctaLong} <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <div class="flex items-center justify-between">
+            <a href={`mailto:${site.email}`} class="label text-paper/70">{site.email}</a>
+            <div role="group" aria-label={t.ui.langSwitch} class="label flex overflow-hidden rounded-full border border-paper/30">
+              {
+                langs.map((l) =>
+                  l === lang ? (
+                    <span aria-current="true" class="bg-paper px-3 py-2 text-ink">{l}</span>
+                  ) : (
+                    <a href={routes[routeKey][l]} hreflang={l} lang={l} class="px-3 py-2">{l}</a>
+                  ),
+                )
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Progreso de lectura -->
+  <div id="progress" class="pointer-events-none absolute inset-x-0 bottom-[-1px] z-[3] h-[2px] origin-left scale-x-0 bg-ink" aria-hidden="true"></div>
+</header>

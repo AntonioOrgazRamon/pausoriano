@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { abs, getT, path, routes, site, type Lang, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  routeKey: RouteKey;
+  title: string;
+  description: string;
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+const { lang, routeKey, title, description, jsonLd = [], noindex = false } = Astro.props;
+const t = getT(lang);
+
+const canonical = abs(path(routeKey, lang));
+const altEs = abs(routes[routeKey].es);
+const altEn = abs(routes[routeKey].en);
+const ogImage = abs('/og.png');
+
+const personId = abs('/#person');
+const graph = [
+  {
+    '@type': 'WebSite',
+    '@id': abs('/#website'),
+    url: abs('/'),
+    name: site.name,
+    inLanguage: ['es-ES', 'en'],
+    publisher: { '@id': personId },
+  },
+  {
+    '@type': ['Person', 'ProfessionalService'],
+    '@id': personId,
+    name: site.name,
+    url: abs('/'),
+    image: ogImage,
+    email: site.email,
+    jobTitle: 'Media Buyer · Meta Ads',
+    description: getT('es').meta.home.description,
+    knowsAbout: ['Meta Ads', 'Facebook Ads', 'Instagram Ads', 'Lead generation', 'E-commerce', 'Infoproductos', 'Performance marketing'],
+    sameAs: [site.instagram, site.linkedin],
+    areaServed: ['ES', 'Worldwide'],
+    availableLanguage: ['es', 'en'],
+  },
+  ...jsonLd,
+];
+const schema = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="alternate" hreflang="es" href={altEs} />
+    <link rel="alternate" hreflang="en" href={altEn} />
+    <link rel="alternate" hreflang="x-default" href={altEs} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={t.locale} />
+    <meta property="og:locale:alternate" content={lang === 'es' ? 'en_GB' : 'es_ES'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#f5f3ee" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      setTimeout(function () {
+        if (!window.__motion) document.documentElement.classList.add('no-motion');
+      }, 2200);
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body class="min-h-screen overflow-x-clip">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-lime focus:px-4 focus:py-2 focus:text-ink"
+      >{t.ui.skip}</a
+    >
+    <Header lang={lang} routeKey={routeKey} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+
+    <div id="sticky-cta" inert class="fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 md:hidden">
+      <a href={site.calendly} target="_blank" rel="noopener" class="btn btn-primary w-full justify-between shadow-[0_10px_30px_-8px_rgb(11_11_12/0.35)]">
+        {t.ui.ctaLong} <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

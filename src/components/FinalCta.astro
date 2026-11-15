@@ -1,0 +1,36 @@
+---
+import { fmt, getT, site, type Lang } from '../i18n';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+---
+
+<section id="cta-final" class="px-0 pb-14 sm:pb-28">
+  <div class="wrap">
+    <div
+      data-reveal
+      class="relative overflow-hidden rounded-[2.25rem] bg-lime px-6 py-16 sm:px-14 sm:py-24"
+    >
+      <div data-parallax="-25,25" class="pointer-events-none absolute -top-24 -right-24 size-[26rem] rounded-full bg-paper/40 blur-3xl" aria-hidden="true"></div>
+      <div class="relative">
+        <p class="label text-ink/70">(07) {t.finalCta.eyebrow}</p>
+        <h2 class="display mt-6 max-w-4xl text-[clamp(2.6rem,7vw,6.5rem)]" set:html={fmt(t.finalCta.title)} />
+
+        <div class="mt-14 grid gap-10 border-t border-ink/20 pt-8 lg:grid-cols-12">
+          <p class="max-w-xl text-lg leading-relaxed lg:col-span-6">{t.finalCta.text}</p>
+          <div class="flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-8">
+            <a href={site.calendly} target="_blank" rel="noopener" class="btn btn-ink w-full justify-between sm:w-auto">
+              {t.ui.ctaLong} <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <p class="label">
+              {t.finalCta.or}{' '}
+              <a class="underline decoration-2 underline-offset-4" href={`mailto:${site.email}`}>{site.email}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
